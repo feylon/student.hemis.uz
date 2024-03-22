@@ -1,17 +1,19 @@
-import Express from "express";
+import express from "express";
 import Joi from "joi";
 import mongoose from "mongoose";
 import http from "http";
 import dotev from "dotenv";
-import { dean } from "./models/index.js";
+import { password_checker, password_generate } from "./password/index.js";
+import dean from "./dean_routes/index.js";
 
 dotev.config();
-// console.log()
 
-const app = Express();
+const app = express();
+app.use(express.json())
+app.use("/dean",dean);
 const server = http.createServer(app);
 
-// MongoDbni ulash
+// MongoDbni ulash new Date().toLocaleDateString()
 (async()=>{
     try{
     await mongoose.connect(process.env.mongodb);

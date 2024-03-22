@@ -16,14 +16,14 @@ const Student = mongoose.models.student || mongoose.model("student",  new  mongo
      }
 ));
 
-const dean = mongoose.models.dean || mongoose.model("dean", new mongoose.Schema({
-    login :{type:String, unique:[true,"Xodim mavjud"], required:true, minlength:[5,"Belgilar soni 5 tadan kam bo'lmasligi lozim"],maxlength:[15,"Belgilar soni 15tadan oshmasligi lozim"]},
+const Dean = mongoose.models.dean || mongoose.model("dean", new mongoose.Schema({
+    login :{type:String,lowercase:true, unique:[true,"Xodim mavjud"], required:true, minlength:[5,"Belgilar soni 5 tadan kam bo'lmasligi lozim"],maxlength:[15,"Belgilar soni 15tadan oshmasligi lozim"]},
     password:{type:String, required:true},
     name:{type:String, required:true},
     date_of_brith:{type:String, required:true},
     surname:{type:String, required:true},
     active:{type:Boolean, required:true},
-    date_of_join:{type:String, required:true},
+    date_of_join:{type:String, default:new Date().toLocaleDateString()},
     phone:{type:String, required:true},
     phone1:{type:String, required:false},
     status:{type:Boolean, required:true}
@@ -179,7 +179,7 @@ const test = mongoose.model("test", new mongoose.Schema(
 
 }));
 
-export { Student, dean, Teacher, Classroom, Classroom_Student,
+export { Student, Dean, Teacher, Classroom, Classroom_Student,
     subject, Timetable, result_by_day, Attendance, resource_subject,
     last_login_dean, last_login_student, last_login_teacher
 }
