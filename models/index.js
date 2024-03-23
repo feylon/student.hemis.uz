@@ -8,7 +8,7 @@ const Student = mongoose.models.student || mongoose.model("student",  new  mongo
         date_of_brith:{type:String, required:true},
         surname:{type:String, required:true},
         active:{type:Boolean, required:true},
-        date_of_join:{type:String, required:true},
+        date_of_join:{type:String, default:new Date().toLocaleDateString()},
         phone:{type:String, required:true},
         phone1:{type:String, required:false},
         status:{type:Boolean, required:true}
@@ -39,7 +39,7 @@ const Teacher = mongoose.models.teacher || mongoose.model("teacher", new mongoos
         date_of_brith:{type:String, required:true},
         surname:{type:String, required:true},
         active:{type:Boolean, required:true},
-        date_of_join:{type:String, required:true},
+        date_of_join:{type:String, default:new Date().toLocaleDateString()},
         phone:{type:String, required:true},
         phone1:{type:String, required:false},
         status:{type:Boolean, required:true}
@@ -69,18 +69,24 @@ const Classroom_Student = mongoose.models.Classroom_Student || mongoose.model("C
                 ref:"student",
                 required:true                
                 },
-        classroom:{
-            type:mongoose.Schema.ObjectId,
-            ref:"classroom"
-        }
+        // classroom:{
+        //     type:mongoose.Schema.ObjectId,
+        //     ref:"classroom"
+        // },
+        name:{
+            type:String,
+            lowercase:true,
+            unique:true,
+            required:true
+            }
 
     }
     ));
 
 const subject = mongoose.models.subject || mongoose.model("subject", new mongoose.Schema({
-    name:{type:String, required:true},
+    name:{type:String, required:true,unique:true, lowercase:true},
     description:{type:String, required:true},
-    teacher:{type:mongoose.Schema.ObjectId, required:true}
+    teacher:{type:mongoose.Schema.ObjectId,ref:"teacher", required:true}
 }));
 
 
