@@ -47,19 +47,6 @@ const Teacher = mongoose.models.teacher || mongoose.model("teacher", new mongoos
 ));
 
 
-
-
-
-
-const Classroom = mongoose.models.classroom || mongoose.model("classroom", new mongoose.Schema(
-    {
-        section:{type:String,required:true},
-        grade:{type:Number, required:true},
-        teacher:{type:mongoose.Schema.ObjectId, required:true, ref:"teacher"},
-        name:{type:String, required:true}
-    }
-        ));
-
         
 
 const Classroom_Student = mongoose.models.Classroom_Student || mongoose.model("Classroom_Student", new mongoose.Schema(
@@ -83,10 +70,25 @@ const Classroom_Student = mongoose.models.Classroom_Student || mongoose.model("C
     }
     ));
 
+
+    const Classroom = mongoose.models.classroom || mongoose.model("classroom", new mongoose.Schema(
+    {
+        section:{type:String,required:true},// bu yerda sinfxona begilanadi
+        grade:{type:Number, required:true},
+        teacher:{type:mongoose.Schema.ObjectId, required:true, ref:"teacher"},
+        name:{type:String, required:true},
+        classroom:{type:mongoose.Schema.ObjectId, ref : "Classroom_Student",required:true}
+    }
+        ));
+
+
+
+
 const subject = mongoose.models.subject || mongoose.model("subject", new mongoose.Schema({
     name:{type:String, required:true,unique:true, lowercase:true},
     description:{type:String, required:true},
-    teacher:{type:mongoose.Schema.ObjectId,ref:"teacher", required:true}
+    teacher:{type:mongoose.Schema.ObjectId,ref:"teacher", required:true},
+    classroom:{type:mongoose.Schema.ObjectId, ref: "Classroom_Student", required:true}
 }));
 
 
@@ -111,10 +113,6 @@ const Timetable = mongoose.models.Timetable || mongoose.model("Timetable", new m
     Classroom_Student:{
         type:mongoose.Schema.ObjectId,
         ref:"Classroom_Student"
-    },
-    Classroom:{
-        type:mongoose.Schema.ObjectId,
-        ref:"classroom"
     }
 }));     
 

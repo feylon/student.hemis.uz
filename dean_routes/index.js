@@ -1,7 +1,9 @@
 import { Router } from "express";
 import { password_checker, password_generate } from "../password/index.js";
 import mongoose from "mongoose";
-import { Dean, Teacher, Student, subject,  Classroom_Student } from "../models/index.js";
+import { Dean, Teacher, Student, subject,  Classroom_Student, Classroom,
+    Timetable
+} from "../models/index.js";
 import Joi from "joi";
 import token from "./middleware_Dean.js";
 
@@ -164,6 +166,58 @@ const Schema = Joi.object(
             }
     }
 });
+
+// Darsga bog'langan guruhni hosil qilish 
+
+router.post("/add_subject_classroom", token, async(req, res)=>{
+    const Schema = Joi.object({
+        section:Joi.string().min(3).max(15).required(),
+        grade:Joi.number().required(),
+        teacher:Joi.string().required(),
+        name:Joi.string().min(3).max(15).required(),
+        classroom:Joi.string().required()
+
+    });
+    const validateCheck = Schema.validate(req.body);
+    if(validateCheck.error) return res.status(400).send(validateCheck.error.message);
+
+    const classroom = new Classroom(req.body);
+    try {
+        await classroom.save();
+        return res.status(201).send({created:true});
+    } catch (error) {
+        console.log(error)
+       return res.status(403).send(`Darsga bog'langan guruhni saqlashda xatolikga uchradi : "${error._message}"`);
+    }
+});
+
+// Dars jadvalni qo'shish
+
+router.post("/add_timetable", token, async (req, res)=>{
+  const Schema = Joi.object(
+    {
+        subject:Joi.string().min(25).required(),
+        day:Joi.string().required(),
+        time:Joi.string().required(),
+        teacher:Joi.string().min(25).required(),
+        Classroom_Student:Joi.string().min(25).required()
+    }
+  );
+  const validateCheck = Schema.validate(req.body);
+  if(validateCheck.error) return res.status(400).send(validateCheck.error.message);
+
+    const timetable = new Timetable(req.body);
+    try{
+        await timetable.save();
+    }
+    catch(error){
+        console.log(error)
+        return res.status("500").send("Dars jadvalni saqlashda xatolikga uchradi");
+        
+
+    }
+
+})
 
 
 
