@@ -75,6 +75,42 @@ try {
 });
 
 
+// O'qituvchini tahrirlash
+
+router.post("/edit_teacher",token, async(req, res)=>{
+    const EditTeacherSchema = Joi.object({
+        login:Joi.string().required().min(5).max(15),
+        name:Joi.string().required().min(3).max(15),
+        date_of_brith:Joi.string().required(),
+        surname:Joi.string().required().min(3).max(15),
+        active:Joi.boolean().required(),
+        phone:Joi.string().min(9).max(13).required(),
+        status:Joi.boolean().required()
+    });
+ const teacherstatus = EditTeacherSchema.validate(req.body);
+ if(teacherstatus.error) return res.status(400).send(teacherstatus.error.message);
+const {login, name, date_of_brith,
+surname, active, phone, status} = req.body;
+
+
+try {
+    const data = await Teacher.findOneAndUpdate({login},
+        {name, date_of_brith,
+            surname, active, phone, status});
+
+if(!data) return res.status(404).send("Hujjat topiladi");
+res.status(200).send({edit:true});
+
+} catch (error) {
+    console.log(error);
+     return res.status(500).send("Yangilanish bajarilmadi");
+}
+
+});
+
+
+
+
 // Talabani qo'shish
 
 router.post("/add_student",token, async(req, res)=>{
@@ -105,6 +141,41 @@ try {
 }
 
 });
+
+
+
+// Talaba ma'lumotlarini tahrirlash
+
+router.post("/edit_student",token, async(req, res)=>{
+    const EditStudentSchema = Joi.object({
+        login:Joi.string().required().min(5).max(15),
+        name:Joi.string().required().min(3).max(15),
+        date_of_brith:Joi.string().required(),
+        surname:Joi.string().required().min(3).max(15),
+        active:Joi.boolean().required(),
+        phone:Joi.string().min(9).max(13).required(),
+        status:Joi.boolean().required()
+    });
+ const studentstatus = EditStudentSchema.validate(req.body);
+ if(studentstatus.error) return res.status(400).send(studentstatus.error.message);
+
+const {login,name,date_of_brith,
+    surname, active, phone, status
+} = req.body;
+ try {
+  const  data = await Student.findOneAndUpdate({login},
+    {name,date_of_brith,surname, active, phone, status});
+
+    if(!data) return res.status(404).send("Hujjat topiladi");
+    res.status(200).send({edit:true});
+} catch (error) {
+    console.log(error);
+    res.status(500).send("Xatolikga uchradi");
+
+}
+});
+
+
 
 // Yangi fan qo'shish
 router.post("/add_subject", token, async (req, res)=>
@@ -196,11 +267,11 @@ router.post("/add_subject_classroom", token, async(req, res)=>{
 router.post("/add_timetable", token, async (req, res)=>{
   const Schema = Joi.object(
     {
-        subject:Joi.string().min(25).required(),
+        subject:Joi.string().min(24).required(),
         day:Joi.string().required(),
         time:Joi.string().required(),
-        teacher:Joi.string().min(25).required(),
-        Classroom_Student:Joi.string().min(25).required()
+        teacher:Joi.string().min(24).required(),
+        Classroom_Student:Joi.string().min(24).required()
     }
   );
   const validateCheck = Schema.validate(req.body);
@@ -209,15 +280,20 @@ router.post("/add_timetable", token, async (req, res)=>{
     const timetable = new Timetable(req.body);
     try{
         await timetable.save();
+        return res.status(201).send({created:true});
+        
     }
     catch(error){
         console.log(error)
-        return res.status("500").send("Dars jadvalni saqlashda xatolikga uchradi");
+        return res.status(500).send("Dars jadvalni saqlashda xatolikga uchradi");
         
 
     }
 
 })
+
+
+
 
 
 
