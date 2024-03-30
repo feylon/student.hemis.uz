@@ -209,6 +209,7 @@ const SubjectValidate = Joi.object({
 
 
 
+
 // Guruhni hosil qilish
 router.post("/add_student_group", token, async (req, res)=>{
 const Schema = Joi.object(
@@ -284,7 +285,7 @@ router.post("/add_timetable", token, async (req, res)=>{
         
     }
     catch(error){
-        console.log(error)
+     console.log(error)
         return res.status(500).send("Dars jadvalni saqlashda xatolikga uchradi");
         
 

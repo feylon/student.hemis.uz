@@ -4,13 +4,15 @@ import mongoose from "mongoose";
 import http from "http";
 import dotev from "dotenv";
 import { password_checker, password_generate } from "./password/index.js";
-import dean from "./dean_routes/index.js";
 
+import dean from "./dean_routes/index.js";
+import teacher from "./teacher_routes/middleware_Teacher.js";
 dotev.config();
 
 const app = express();
 app.use(express.json())
 app.use("/dean",dean);
+app.use("/teacher", teacher);
 const server = http.createServer(app);
 
 // MongoDbni ulash new Date().toLocaleDateString()
