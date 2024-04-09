@@ -11,10 +11,10 @@ import teacher from "./teacher_routes/middleware_Teacher.js";
 dotev.config();
 
 const app = express();
+app.use(cors());
 app.use(express.json())
 app.use("/dean",dean);
 app.use("/teacher", teacher);
-app.use(cors())
 const server = http.createServer(app);
 
 // MongoDbni ulash new Date().toLocaleDateString()
