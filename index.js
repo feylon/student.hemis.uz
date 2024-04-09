@@ -2,6 +2,7 @@ import express from "express";
 import Joi from "joi";
 import mongoose from "mongoose";
 import http from "http";
+import cors from "cors";
 import dotev from "dotenv";
 import { password_checker, password_generate } from "./password/index.js";
 
@@ -13,6 +14,7 @@ const app = express();
 app.use(express.json())
 app.use("/dean",dean);
 app.use("/teacher", teacher);
+app.use(cors())
 const server = http.createServer(app);
 
 // MongoDbni ulash new Date().toLocaleDateString()

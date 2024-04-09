@@ -46,7 +46,16 @@ const Teacher = mongoose.models.teacher || mongoose.model("teacher", new mongoos
     }
 ));
 
+const Facultet = mongoose.models.facultet || mongoose.model("facultet", new mongoose.Schema(
+    {
+        name:{
+            type:String,
+            required:true,
+            unique:true
 
+        }
+    }
+))
         
 
 const Classroom_Student = mongoose.models.Classroom_Student || mongoose.model("Classroom_Student", new mongoose.Schema(
@@ -56,10 +65,10 @@ const Classroom_Student = mongoose.models.Classroom_Student || mongoose.model("C
                 ref:"student",
                 required:true                
                 },
-        // classroom:{
-        //     type:mongoose.Schema.Types.ObjectId,
-        //     ref:"classroom"
-        // },
+        facultet:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"facultet"
+        },
         name:{
             type:String,
             lowercase:true,
@@ -188,5 +197,7 @@ const test = mongoose.model("test", new mongoose.Schema(
 
 export { Student, Dean, Teacher, Classroom, Classroom_Student,
     subject, Timetable, result_by_day, Attendance, resource_subject,
-    last_login_dean, last_login_student, last_login_teacher
+    last_login_dean, last_login_student, last_login_teacher,
+    Facultet
+
 }

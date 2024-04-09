@@ -2,7 +2,7 @@ import { Router } from "express";
 import { password_checker, password_generate } from "../password/index.js";
 import mongoose from "mongoose";
 import { Dean, Teacher, Student, subject,  Classroom_Student, Classroom,
-    Timetable
+    Timetable, Facultet
 } from "../models/index.js";
 import Joi from "joi";
 import token from "./middleware_Dean.js";
@@ -207,6 +207,42 @@ const SubjectValidate = Joi.object({
 
 
 
+// Fakultetni qo'shish
+router.post("/add_facultet", token, async (req, res)=>{
+const Schema = Joi.object(
+    {name:Joi.string().required(),
+        
+    });
+    const validateCheck = Schema.validate(req.body);
+    if(validateCheck.error)
+    return res.status(400).send(validateCheck.error.message);
+    const facultet = new Facultet(req.body);
+    try {
+        await facultet.save();
+       return res.status(201).send({created:true});
+    } catch (error) {
+        if(error.code == 11000)
+        return res.status(403).send(`"${req.body.name}" fakultetlar ro'yxatida mavjud!`);
+        console.log(error);
+ 
+    }
+});
+
+// Fakultetni olish 
+router.get("/facultets", token, async (req, res)=>{
+    const data = await Facultet.find();
+   return  res.status(200).send(data)
+});
+
+router.delete("/facultets/:id", token, async(req, res)=>{
+    try {
+       await Facultet.findByIdAndDelete(req.params.id)
+        res.status(201).send({deleted:true})
+    } catch (error) {
+        res.status(403).send("Xatolik ro'y berdi")
+    }    
+   
+})
 
 
 
